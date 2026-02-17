@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Ticket(models.Model):
 
     CATEGORY_CHOICES = [
@@ -23,14 +24,50 @@ class Ticket(models.Model):
         ("closed", "Closed"),
     ]
 
-    title = models.CharField(max_length=200)
-    description = models.TextField()
+    # -----------------------------
+    # Core Fields
+    # -----------------------------
+    title = models.CharField(
+        max_length=200,
+        null=False,
+        blank=False,
+    )
 
-    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
-    priority = models.CharField(max_length=20, choices=PRIORITY_CHOICES)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="open")
+    description = models.TextField(
+        null=False,
+        blank=False,
+    )
 
-    created_at = models.DateTimeField(auto_now_add=True)
+    category = models.CharField(
+        max_length=20,
+        choices=CATEGORY_CHOICES,
+        null=False,
+        blank=False,
+        db_index=True,
+    )
+
+    priority = models.CharField(
+        max_length=20,
+        choices=PRIORITY_CHOICES,
+        null=False,
+        blank=False,
+        db_index=True,
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="open",
+        db_index=True,
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        db_index=True,
+    )
+
+    class Meta:
+        ordering = ["-created_at"]  # newest first (assignment requirement)
 
     def __str__(self):
-        return self.title
+        return f"{self.title} ({self.status})"
