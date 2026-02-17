@@ -1,137 +1,106 @@
-## Support Ticket System
+# 🎫 Support Ticket System
 
-Tech Intern Assessment – Full Stack Application
+A full-stack support ticket management app with AI-powered auto-classification. Built with Django, React, and PostgreSQL — fully containerized with Docker.
 
-Overview
+![Django](https://img.shields.io/badge/Django-092E20?style=flat&logo=django&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=flat&logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white)
+![Gemini](https://img.shields.io/badge/Google%20Gemini-8E75B2?style=flat&logo=googlegemini&logoColor=white)
 
-This project is a full-stack Support Ticket System that allows users to submit, manage, and analyze support tickets.
+---
 
-The key differentiator is the integration of an LLM-based auto-classification system, which suggests ticket category and priority before submission.
+## Overview
 
-The application is fully containerized and runs using a single Docker command.
+Users can submit support tickets and get instant AI suggestions for category and priority before submitting. Tickets move through a defined lifecycle, and a statistics dashboard surfaces key metrics — all computed via database-level aggregation.
 
-Tech Stack
+---
 
-Backend
+## Features
 
-Django
+- **AI Classification** — Gemini API suggests category and priority from the ticket description, with manual override support and graceful fallback if the service is unavailable
+- **Ticket Lifecycle** — Full status management: `open → in_progress → resolved → closed`
+- **Search & Filtering** — Search by title/description; filter by category, priority, and status
+- **Statistics Dashboard** — Total tickets, open tickets, avg. tickets/day (last 30 days), priority and category breakdowns
+- **Fully Containerized** — Postgres, Django, and React run as isolated Docker services, started with a single command
 
-Django REST Framework
+---
 
-PostgreSQL
+## Tech Stack
 
-Frontend
+| Layer | Technology |
+|---|---|
+| Backend | Django, Django REST Framework |
+| Database | PostgreSQL |
+| Frontend | React (Vite) |
+| AI | Google Gemini API |
+| Infrastructure | Docker, Docker Compose |
 
-React (Vite)
+---
 
-LLM Integration
+## Getting Started
 
-Google Gemini API
+### Prerequisites
 
-Infrastructure
+- [Docker](https://docs.docker.com/get-docker/) & [Docker Compose](https://docs.docker.com/compose/)
+- A [Google Gemini API key](https://ai.google.dev/)
 
-Docker
+### 1. Configure environment
 
-Docker Compose
+Create a `.env` file in the project root:
 
-Core Features
-Ticket Management
-
-Create support tickets
-
-Auto-suggest category and priority via LLM
-
-Manually override LLM suggestions
-
-Update ticket status (open → in_progress → resolved → closed)
-
-Search by title and description
-
-Filter by category, priority, and status
-
-Statistics Dashboard
-
-Total tickets
-
-Open tickets
-
-Average tickets per day (last 30 days)
-
-Priority breakdown
-
-Category breakdown
-
-Uses database-level aggregation (Django ORM annotate/aggregate)
-
-LLM Integration
-
-/api/tickets/classify/ endpoint
-
-Accepts ticket description
-
-Returns suggested category and priority
-
-Strict JSON response format
-
-Graceful fallback if API fails
-
-API key managed via environment variable
-
-Running the Application
-1️⃣ Add API Key
-
-Create a .env file in the project root:
-
+```env
 GEMINI_API_KEY=your_api_key_here
+```
 
-2️⃣ Start the Application
+### 2. Build and run
 
-From the root directory:
-
+```bash
 docker compose up --build
+```
 
-3️⃣ Access the App
+### 3. Open the app
 
-Frontend:
+| Service | URL |
+|---|---|
+| Frontend | http://localhost:5173 |
+| Backend API | http://localhost:8000/api/tickets/ |
 
-http://localhost:5173
+---
 
+## API Reference
 
-Backend API:
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/tickets/` | List tickets (supports filters & search) |
+| `POST` | `/api/tickets/` | Create a ticket |
+| `PATCH` | `/api/tickets/<id>/` | Update a ticket |
+| `GET` | `/api/tickets/stats/` | Get aggregated statistics |
+| `POST` | `/api/tickets/classify/` | Get AI-suggested category and priority |
 
-http://localhost:8000/api/tickets/
+### Example: Classification
 
-API Endpoints
-Method	Endpoint	Description
-POST	/api/tickets/	Create a ticket
-GET	/api/tickets/	List tickets (supports filters & search)
-PATCH	/api/tickets/<id>/	Update ticket
-GET	/api/tickets/stats/	Get aggregated metrics
-POST	/api/tickets/classify/	Get LLM suggestions
-Design Decisions
+```http
+POST /api/tickets/classify/
+Content-Type: application/json
 
-Enforced field constraints at the database level
+{
+  "description": "The app crashes when uploading files larger than 10MB."
+}
+```
 
-Used ORM aggregation for efficient statistics
+```json
+{
+  "category": "bug",
+  "priority": "high"
+}
+```
 
-Implemented strict LLM prompt formatting
+---
 
-Added graceful failure handling for LLM service
+## Design Notes
 
-Fully containerized architecture
-
-Environment variables for sensitive configuration
-
-Evaluation Coverage
-
-End-to-end functionality with docker compose up --build
-
-Working LLM classification flow
-
-Clean REST API design
-
-Database-level aggregation
-
-Dockerized PostgreSQL + Backend + Frontend
-
-Structured and readable codebase
+- Field constraints enforced at the database level via Django ORM
+- Statistics computed with `annotate`/`aggregate` — no in-memory processing
+- Structured LLM prompt guarantees consistent JSON output from Gemini
+- All secrets managed via environment variables — no hardcoded keys
