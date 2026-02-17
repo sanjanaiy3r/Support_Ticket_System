@@ -4,80 +4,93 @@ Tech Intern Assessment – Full Stack Application
 
 Overview
 
-This project is a full-stack Support Ticket System built with:
+This project is a full-stack Support Ticket System that allows users to submit, manage, and analyze support tickets.
 
-Backend: Django + Django REST Framework + PostgreSQL
+The key differentiator is the integration of an LLM-based auto-classification system, which suggests ticket category and priority before submission.
 
-Frontend: React (Vite)
+The application is fully containerized and runs using a single Docker command.
 
-LLM Integration: Google Gemini API
+Tech Stack
 
-Infrastructure: Docker + Docker Compose
-
-Users can:
-
-Create support tickets
-
-Auto-classify tickets using an LLM
-
-Filter and search tickets
-
-Update ticket status
-
-View aggregated statistics
-
-Features
 Backend
 
-Ticket model with strict DB-level constraints
+Django
 
-Filtering by category, priority, status
+Django REST Framework
 
-Search support (?search= for title + description)
-
-Stats endpoint using database-level aggregation
-
-LLM classification endpoint
-
-Graceful fallback if LLM fails
+PostgreSQL
 
 Frontend
 
-Ticket creation form
-
-Auto-classification before submission
-
-Editable category & priority
-
-Ticket list with status update
-
-Stats dashboard
-
-Auto-refresh after submission
+React (Vite)
 
 LLM Integration
 
-Uses Google Gemini
+Google Gemini API
+
+Infrastructure
+
+Docker
+
+Docker Compose
+
+Core Features
+Ticket Management
+
+Create support tickets
+
+Auto-suggest category and priority via LLM
+
+Manually override LLM suggestions
+
+Update ticket status (open → in_progress → resolved → closed)
+
+Search by title and description
+
+Filter by category, priority, and status
+
+Statistics Dashboard
+
+Total tickets
+
+Open tickets
+
+Average tickets per day (last 30 days)
+
+Priority breakdown
+
+Category breakdown
+
+Uses database-level aggregation (Django ORM annotate/aggregate)
+
+LLM Integration
 
 /api/tickets/classify/ endpoint
 
+Accepts ticket description
+
 Returns suggested category and priority
 
-Fully overrideable by user
+Strict JSON response format
 
-API key via environment variable
+Graceful fallback if API fails
 
-Running the Project
-1. Add your Gemini API key
+API key managed via environment variable
 
-Create a .env file in the root folder:
+Running the Application
+1️⃣ Add API Key
+
+Create a .env file in the project root:
 
 GEMINI_API_KEY=your_api_key_here
 
-2. Run with Docker
+2️⃣ Start the Application
+
+From the root directory:
+
 docker compose up --build
 
-Access:
+3️⃣ Access the App
 
 Frontend:
 
@@ -89,37 +102,36 @@ Backend API:
 http://localhost:8000/api/tickets/
 
 API Endpoints
-
-POST /api/tickets/
-
-GET /api/tickets/
-
-PATCH /api/tickets/<id>/
-
-GET /api/tickets/stats/
-
-POST /api/tickets/classify/
-
+Method	Endpoint	Description
+POST	/api/tickets/	Create a ticket
+GET	/api/tickets/	List tickets (supports filters & search)
+PATCH	/api/tickets/<id>/	Update ticket
+GET	/api/tickets/stats/	Get aggregated metrics
+POST	/api/tickets/classify/	Get LLM suggestions
 Design Decisions
 
-Used database-level aggregation for stats
+Enforced field constraints at the database level
 
-LLM prompt enforces strict JSON output
+Used ORM aggregation for efficient statistics
 
-Graceful fallback if LLM fails
+Implemented strict LLM prompt formatting
 
-Dockerized full stack with PostgreSQL
+Added graceful failure handling for LLM service
 
-Evaluation Criteria Covered
+Fully containerized architecture
 
-Fully working with docker compose up --build
+Environment variables for sensitive configuration
 
-LLM integration
+Evaluation Coverage
 
-DB-level aggregation
+End-to-end functionality with docker compose up --build
 
-Clean API design
+Working LLM classification flow
 
-Containerized infrastructure
+Clean REST API design
 
-Proper environment variable usage
+Database-level aggregation
+
+Dockerized PostgreSQL + Backend + Frontend
+
+Structured and readable codebase
