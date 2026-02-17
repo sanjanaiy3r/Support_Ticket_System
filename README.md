@@ -50,7 +50,7 @@ Users can submit support tickets and get instant AI suggestions for category and
 Create a `.env` file in the project root:
 
 ```env
-GEMINI_API_KEY=your_api_key_here
+GEMINI_API_KEY= AIzaSyDNRkophtlv3WGe9MY3EgFW4aUO7wzsY6U
 ```
 
 ### 2. Build and run
