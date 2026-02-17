@@ -12,7 +12,7 @@ A full-stack support ticket management app with AI-powered auto-classification. 
 
 ## Overview
 
-Users can submit support tickets and get instant AI suggestions for category and priority before submitting. Tickets move through a defined lifecycle, and a statistics dashboard surfaces key metrics — all computed via database-level aggregation.
+Users can submit support tickets and suggestions for category and priority before submitting. Tickets move through a defined lifecycle, and a statistics dashboard surfaces key metrics, all computed via database-level aggregation.
 
 ---
 
