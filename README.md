@@ -50,7 +50,7 @@ Users can submit support tickets and suggestions for category and priority befor
 Create a `.env` file in the project root:
 
 ```env
-GEMINI_API_KEY= AIzaSyDNRkophtlv3WGe9MY3EgFW4aUO7wzsY6U
+GEMINI_API_KEY= xxxxxxx
 ```
 
 ### 2. Build and run
